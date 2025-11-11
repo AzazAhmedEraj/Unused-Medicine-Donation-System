@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unused Medicine Donation System - Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="register.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+    <i class="fas fa-heartbeat"></i> MedDonate
+</a>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <nav class="nav-links">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="login.html" class="btn-secondary"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                    <li><a href="register.html" class="btn-primary"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                </ul>
+            </nav>
+            <label for="nav-toggle" class="nav-toggle-label">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="form-section">
+            <div class="container">
+                <h2>Register as NGO or Individual</h2>
+                <form class="registration-form">
+                    <div class="form-group">
+                        <label>User Type:</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="userType" value="individual" checked> Individual</label>
+                            <label><input type="radio" name="userType" value="ngo"> NGO</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="fullName">Full Name:</label>
+                        <input type="text" id="fullName" placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" placeholder="Enter your password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password:</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm your password">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="tel" id="phone" placeholder="Enter your phone number">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <textarea id="address" placeholder="Enter your address"></textarea>
+                    </div>
+                    <div class="form-group ngo-only" style="display: none;">
+                        <label for="orgName">Organization Name:</label>
+                        <input type="text" id="orgName" placeholder="Enter organization name">
+                    </div>
+                    <div class="form-group ngo-only" style="display: none;">
+                        <label for="regProof">Registration Proof:</label>
+                        <input type="file" id="regProof">
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" name="terms"> I agree to the terms and conditions.</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Registration</button>
+                </form>
+                <p class="form-link">Already have an account? <a href="login.html">Login</a></p>
+                <p class="success-message" style="display: none;">Account created! Login now.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Unused Medicine Donation System. All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="#" class="social-icon"><i class="fab fa-facebook"></i> Facebook</a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i> Instagram</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

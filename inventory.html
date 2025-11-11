@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unused Medicine Donation System - Inventory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="inventory.css">
+</head>
+body 
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+    <i class="fas fa-heartbeat"></i> MedDonate
+</a>
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <nav class="nav-links">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="index.html" class="btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+            <label for="nav-toggle" class="nav-toggle-label">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+    </header>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <ul>
+                <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="donate.html"><i class="fas fa-gift"></i> Donate Medicine</a></li>
+                <li><a href="request.html"><i class="fas fa-hand-holding-medical"></i> Request Medicine</a></li>
+                <li><a href="status.html"><i class="fas fa-clipboard-list"></i> Status</a></li>
+                <li><a href="inventory.html"><i class="fas fa-box-open"></i> Inventory</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content dashboard-content">
+            <section class="form-section">
+                <div class="container">
+                    <h2>Available Medicines</h2>
+                    <div class="search-group">
+                        <label for="medicineSearch">Search Medicine:</label>
+                        <input type="text" id="medicineSearch" placeholder="Enter medicine name">
+                        <label for="categoryFilter">Category:</label>
+                        <select id="categoryFilter">
+                            <option value="painkiller">Painkiller</option>
+                            <option value="antibiotic">Antibiotic</option>
+                        </select>
+                        <label for="locationFilter">Location:</label>
+                        <input type="text" id="locationFilter" placeholder="Enter location">
+                        <button class="btn btn-primary">Search</button>
+                    </div>
+                    <p class="note">Browse medicines available for request.</p>
+                    <div class="inventory-list cards-grid">
+                        <div class="card">
+                            <p>Medicine: Paracetamol, Quantity: 50, Expiry: 12/2026, Donated By: Individual, Location: City A</p>
+                            <a href="request.html" class="btn btn-secondary">Request This Medicine</a>
+                        </div>
+                        <div class="card">
+                            <p>Medicine: Aspirin, Quantity: 20, Expiry: 06/2026, Donated By: NGO, Location: City B</p>
+                            <a href="request.html" class="btn btn-secondary">Request This Medicine</a>
+                        </div>
+                    </div>
+                    <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Unused Medicine Donation System. All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="#" class="social-icon"><i class="fab fa-facebook"></i> Facebook</a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i> Instagram</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
