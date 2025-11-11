@@ -575,3 +575,162 @@ summary {
         padding: 25px 0;
     }
 }
+/* === NO CHECKBOX HAMBURGER === */
+.nav-toggle-btn {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.nav-toggle-btn span {
+    width: 28px;
+    height: 3px;
+    background: white;
+    border-radius: 2px;
+    transition: 0.3s;
+}
+
+.nav-toggle-btn.open span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.nav-toggle-btn.open span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle-btn.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* === MOBILE MENU === */
+@media (max-width: 767px) {
+    .nav-toggle-btn {
+        display: flex;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, #4CAF50, #2196F3);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .nav-links.open {
+        max-height: 500px;
+        padding: 20px 0;
+    }
+
+    .nav-links ul {
+        flex-direction: column;
+        padding: 0 20px;
+        gap: 10px;
+    }
+}
+
+/* === ACTIVE SIDEBAR & NAVBAR === */
+.sidebar a.active,
+.nav-links a.active {
+    background: #4CAF50;
+    color: white;
+    font-weight: 700;
+}
+
+/* === ERROR MESSAGES === */
+.error {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block;
+}
+
+/* === SUCCESS TOAST === */
+.success-toast {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: #27ae60;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    z-index: 1001;
+    transform: translateX(120%);
+    transition: transform 0.4s ease;
+}
+
+.success-toast.show {
+    transform: translateX(0);
+}
+
+/* === FADE-IN === */
+.form-section {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+/* === BACK TO TOP === */
+#backToTop {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: none;
+    z-index: 999;
+    transition: all 0.3s ease;
+}
+
+#backToTop:hover {
+    background: #388E3C;
+    transform: scale(1.1);
+}
+
+/* === FORM STYLING === */
+.donate-form {
+    display: grid;
+    gap: 18px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.donate-form input,
+.donate-form textarea,
+.donate-form select {
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fdfdfd;
+}
+
+.donate-form input:focus,
+.donate-form textarea:focus,
+.donate-form select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+}
+
+.donate-form textarea {
+    min-height: 100px;
+}

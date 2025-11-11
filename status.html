@@ -12,8 +12,8 @@
     <header class="navbar">
         <div class="container">
             <a href="index.html" class="logo">
-    <i class="fas fa-heartbeat"></i> MedDonate
-</a>
+                <i class="fas fa-heartbeat"></i> MedDonate
+            </a>
             <input type="checkbox" id="nav-toggle" class="nav-toggle">
             <nav class="nav-links">
                 <ul>
@@ -21,7 +21,7 @@
                     <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
                     <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
                     <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
-                    <li><a href="index.html" class="btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    <li><a href="#" id="logoutBtn" class="btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
             </nav>
             <label for="nav-toggle" class="nav-toggle-label">
@@ -38,7 +38,7 @@
                 <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><a href="donate.html"><i class="fas fa-gift"></i> Donate Medicine</a></li>
                 <li><a href="request.html"><i class="fas fa-hand-holding-medical"></i> Request Medicine</a></li>
-                <li><a href="status.html"><i class="fas fa-clipboard-list"></i> Status</a></li>
+                <li><a href="status.html" class="active"><i class="fas fa-clipboard-list"></i> Status</a></li>
                 <li><a href="inventory.html"><i class="fas fa-box-open"></i> Inventory</a></li>
             </ul>
         </aside>
@@ -47,41 +47,51 @@
             <section class="form-section">
                 <div class="container">
                     <h2>Donation & Request Status</h2>
+
                     <div class="filter-group">
                         <label for="typeFilter">Filter by Type:</label>
                         <select id="typeFilter">
+                            <option value="all">All</option>
                             <option value="donations">Donations</option>
                             <option value="requests">Requests</option>
                         </select>
                         <label for="statusFilter">Filter by Status:</label>
                         <select id="statusFilter">
+                            <option value="all">All Status</option>
                             <option value="pending">Pending</option>
                             <option value="approved">Approved</option>
                             <option value="matched">Matched</option>
                             <option value="delivered">Delivered</option>
                         </select>
-                        <button class="btn btn-primary">Filter Results</button>
+                        <label for="searchInput">Search:</label>
+                        <input type="text" id="searchInput" placeholder="Medicine name...">
+                        <button id="filterBtn" class="btn btn-primary">Filter</button>
                     </div>
+
                     <p class="note">Check the status of your submissions here.</p>
-                    <div class="status-list cards-grid">
-                        <div class="card">
-                            <p>Paracetamol, 50 tablets, Submitted 10/15/2025, Status: Pending</p>
-                            <a href="#" class="btn btn-secondary">View Details</a>
-                        </div>
-                        <div class="card">
-                            <p>Aspirin, 20 tablets, Submitted 10/10/2025, Status: Approved</p>
-                            <a href="#" class="btn btn-secondary">View Details</a>
-                        </div>
+
+                    <div id="statusList" class="status-list cards-grid">
+                        <!-- Dynamic cards loaded here -->
                     </div>
+
                     <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
                 </div>
             </section>
         </main>
     </div>
 
+    <!-- Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Submission Details</h3>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Unused Medicine Donation System. All rights reserved.</p>
+            <p>© 2025 Unused Medicine Donation System. All rights reserved.</p>
             <ul class="footer-links">
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -93,5 +103,180 @@
             </div>
         </div>
     </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // === 1. Mobile Menu ===
+        const navToggle = document.getElementById('nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        navToggle.addEventListener('change', () => {
+            navLinks.style.display = navToggle.checked ? 'block' : 'none';
+        });
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 767) {
+                    navToggle.checked = false;
+                    navLinks.style.display = 'none';
+                }
+            });
+        });
+
+        // === 2. Active Sidebar ===
+        document.querySelectorAll('.sidebar a').forEach(link => {
+            if (link.href.includes('status.html')) {
+                link.classList.add('active');
+            }
+        });
+
+        // === 3. Back to Top ===
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop.style.display = (window.scrollY > 300) ? 'block' : 'none';
+        });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // === 4. Load & Display Data ===
+        const statusList = document.getElementById('statusList');
+        const typeFilter = document.getElementById('typeFilter');
+        const statusFilter = document.getElementById('statusFilter');
+        const searchInput = document.getElementById('searchInput');
+        const filterBtn = document.getElementById('filterBtn');
+
+        let allData = [];
+
+        function loadData() {
+            const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+            const requests = JSON.parse(localStorage.getItem('requests') || '[]');
+
+            allData = [
+                ...donations.map(d => ({ ...d, type: 'donation', status: getRandomStatus() })),
+                ...requests.map(r => ({ ...r, type: 'request', status: getRandomStatus() }))
+            ].sort((a, b) => b.id - a.id);
+
+            renderCards(allData);
+        }
+
+        function getRandomStatus() {
+            const statuses = ['pending', 'approved', 'matched', 'delivered'];
+            return statuses[Math.floor(Math.random() * statuses.length)];
+        }
+
+        function renderCards(data) {
+            statusList.innerHTML = '';
+            if (data.length === 0) {
+                statusList.innerHTML = '<p>No submissions found.</p>';
+                return;
+            }
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <p><strong>${item.name}</strong> x${item.qty}<br>
+                    <small>Submitted: ${item.date || 'N/A'}</small><br>
+                    <span class="status-badge ${item.status}">${formatStatus(item.status)}</span></p>
+                    <button class="btn btn-secondary view-details" data-id="${item.id}" data-type="${item.type}">View Details</button>
+                `;
+                statusList.appendChild(card);
+            });
+
+            // Attach modal listeners
+            document.querySelectorAll('.view-details').forEach(btn => {
+                btn.addEventListener('click', () => showModal(btn.dataset.id, btn.dataset.type));
+            });
+        }
+
+        function formatStatus(status) {
+            return status.charAt(0).toUpperCase() + status.slice(1);
+        }
+
+        // === 5. Filter & Search ===
+        filterBtn.addEventListener('click', applyFilters);
+        searchInput.addEventListener('input', applyFilters);
+        typeFilter.addEventListener('change', applyFilters);
+        statusFilter.addEventListener('change', applyFilters);
+
+        function applyFilters() {
+            let filtered = allData;
+
+            // Type filter
+            const type = typeFilter.value;
+            if (type !== 'all') {
+                filtered = filtered.filter(item => item.type === type);
+            }
+
+            // Status filter
+            const status = statusFilter.value;
+            if (status !== 'all') {
+                filtered = filtered.filter(item => item.status === status);
+            }
+
+            // Search
+            const query = searchInput.value.toLowerCase().trim();
+            if (query) {
+                filtered = filtered.filter(item => item.name.toLowerCase().includes(query));
+            }
+
+            renderCards(filtered);
+        }
+
+        // === 6. Modal ===
+        const modal = document.getElementById('detailModal');
+        const closeBtn = document.querySelector('.close');
+
+        function showModal(id, type) {
+            const item = allData.find(i => i.id == id && i.type === type);
+            if (!item) return;
+
+            let details = `
+                <p><strong>Type:</strong> ${item.type === 'donation' ? 'Donation' : 'Request'}</p>
+                <p><strong>Medicine:</strong> ${item.name} x${item.qty}</p>
+                <p><strong>Status:</strong> <span class="status-badge ${item.status}">${formatStatus(item.status)}</span></p>
+                <p><strong>Date:</strong> ${item.date || 'N/A'}</p>
+            `;
+
+            if (item.type === 'donation') {
+                details += `
+                    <p><strong>Condition:</strong> ${item.condition}</p>
+                    <p><strong>Expiry:</strong> ${item.expiry}</p>
+                    <p><strong>Pickup Address:</strong> ${item.address}</p>
+                    <p><strong>Contact:</strong> ${item.contact}</p>
+                `;
+            } else {
+                details += `
+                    <p><strong>Reason:</strong> ${item.reason}</p>
+                    <p><strong>Delivery Address:</strong> ${item.address}</p>
+>
+                    <p><strong>Urgency:</strong> ${item.urgency}</p>
+                    ${item.beneficiaries ? `<p><strong>Beneficiaries:</strong> ${item.beneficiaries}</p>` : ''}
+                `;
+            }
+
+            document.getElementById('modalBody').innerHTML = details;
+            modal.style.display = 'block';
+        }
+
+        closeBtn.onclick = () => modal.style.display = 'none';
+        window.onclick = e => { if (e.target === modal) modal.style.display = 'none'; };
+
+        // === 7. Logout ===
+        document.getElementById('logoutBtn').addEventListener('click', e => {
+            e.preventDefault();
+            if (confirm('Logout now?')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        });
+
+        // === 8. Init ===
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            document.querySelector('.form-section').style.opacity = '1';
+        });
+    </script>
 </body>
 </html>

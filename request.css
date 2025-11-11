@@ -575,3 +575,79 @@ summary {
         padding: 25px 0;
     }
 }
+/* NGO Field */
+.ngo-only {
+    display: none;
+}
+
+/* Success Toast */
+.toast {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: #27ae60;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    z-index: 1001;
+    transform: translateX(120%);
+    transition: transform 0.4s ease;
+}
+
+.toast.show {
+    transform: translateX(0);
+}
+
+.toast i {
+    font-size: 1.3rem;
+}
+
+/* Error Messages */
+.error {
+    display: block;
+    min-height: 20px;
+    margin-top: 5px;
+}
+
+/* Fade-in */
+.form-section {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+/* Back to Top */
+#backToTop {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: none;
+    z-index: 999;
+    transition: all 0.3s ease;
+}
+
+#backToTop:hover {
+    background: #388E3C;
+    transform: scale(1.1);
+}
+
+/* Active Sidebar */
+.sidebar a.active {
+    background: #4CAF50;
+    color: white;
+    font-weight: 700;
+    border-radius: 8px;
+}

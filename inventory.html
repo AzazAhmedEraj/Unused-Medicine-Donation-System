@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="inventory.css">
 </head>
-body 
+<body>
     <header class="navbar">
         <div class="container">
             <a href="index.html" class="logo">
-    <i class="fas fa-heartbeat"></i> MedDonate
-</a>
+                <i class="fas fa-heartbeat"></i> MedDonate
+            </a>
             <input type="checkbox" id="nav-toggle" class="nav-toggle">
             <nav class="nav-links">
                 <ul>
@@ -21,7 +21,7 @@ body
                     <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
                     <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
                     <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
-                    <li><a href="index.html" class="btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    <li><a href="#" id="logoutBtn" class="btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
             </nav>
             <label for="nav-toggle" class="nav-toggle-label">
@@ -39,7 +39,7 @@ body
                 <li><a href="donate.html"><i class="fas fa-gift"></i> Donate Medicine</a></li>
                 <li><a href="request.html"><i class="fas fa-hand-holding-medical"></i> Request Medicine</a></li>
                 <li><a href="status.html"><i class="fas fa-clipboard-list"></i> Status</a></li>
-                <li><a href="inventory.html"><i class="fas fa-box-open"></i> Inventory</a></li>
+                <li><a href="inventory.html" class="active"><i class="fas fa-box-open"></i> Inventory</a></li>
             </ul>
         </aside>
 
@@ -47,29 +47,32 @@ body
             <section class="form-section">
                 <div class="container">
                     <h2>Available Medicines</h2>
+
                     <div class="search-group">
                         <label for="medicineSearch">Search Medicine:</label>
                         <input type="text" id="medicineSearch" placeholder="Enter medicine name">
+
                         <label for="categoryFilter">Category:</label>
                         <select id="categoryFilter">
+                            <option value="all">All</option>
                             <option value="painkiller">Painkiller</option>
                             <option value="antibiotic">Antibiotic</option>
+                            <option value="antipyretic">Antipyretic</option>
+                            <option value="other">Other</option>
                         </select>
+
                         <label for="locationFilter">Location:</label>
                         <input type="text" id="locationFilter" placeholder="Enter location">
-                        <button class="btn btn-primary">Search</button>
+
+                        <button id="searchBtn" class="btn btn-primary">Search</button>
                     </div>
+
                     <p class="note">Browse medicines available for request.</p>
-                    <div class="inventory-list cards-grid">
-                        <div class="card">
-                            <p>Medicine: Paracetamol, Quantity: 50, Expiry: 12/2026, Donated By: Individual, Location: City A</p>
-                            <a href="request.html" class="btn btn-secondary">Request This Medicine</a>
-                        </div>
-                        <div class="card">
-                            <p>Medicine: Aspirin, Quantity: 20, Expiry: 06/2026, Donated By: NGO, Location: City B</p>
-                            <a href="request.html" class="btn btn-secondary">Request This Medicine</a>
-                        </div>
+
+                    <div id="inventoryList" class="inventory-list cards-grid">
+                        <!-- Dynamic cards loaded here -->
                     </div>
+
                     <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
                 </div>
             </section>
@@ -78,7 +81,7 @@ body
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Unused Medicine Donation System. All rights reserved.</p>
+            <p>© 2025 Unused Medicine Donation System. All rights reserved.</p>
             <ul class="footer-links">
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -90,5 +93,163 @@ body
             </div>
         </div>
     </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // === 1. Mobile Menu ===
+        const navToggle = document.getElementById('nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        navToggle.addEventListener('change', () => {
+            navLinks.style.display = navToggle.checked ? 'block' : 'none';
+        });
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 767) {
+                    navToggle.checked = false;
+                    navLinks.style.display = 'none';
+                }
+            });
+        });
+
+        // === 2. Active Sidebar ===
+        document.querySelectorAll('.sidebar a').forEach(link => {
+            if (link.href.includes('inventory.html')) {
+                link.classList.add('active');
+            }
+        });
+
+        // === 3. Back to Top ===
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop.style.display = (window.scrollY > 300) ? 'block' : 'none';
+        });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // === 4. Load Inventory ===
+        const inventoryList = document.getElementById('inventoryList');
+        const searchInput = document.getElementById('medicineSearch');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const locationFilter = document.getElementById('locationFilter');
+        const searchBtn = document.getElementById('searchBtn');
+
+        let allDonations = [];
+
+        function loadInventory() {
+            const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+            // Filter only available (not requested yet)
+            allDonations = donations.filter(d => !d.requested);
+            renderCards(allDonations);
+        }
+
+        function renderCards(data) {
+            inventoryList.innerHTML = '';
+            if (data.length === 0) {
+                inventoryList.innerHTML = '<p>No medicines available.</p>';
+                return;
+            }
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <p><strong>${item.name}</strong> x${item.qty}<br>
+                    <small>Expiry: ${item.expiry} • Condition: ${item.condition}</small><br>
+                    <small>Location: ${item.address.split(',')[0]} • Donated on ${item.date}</small></p>
+                    <button class="btn btn-secondary request-medicine" 
+                            data-name="${item.name}" data-qty="${item.qty}" data-id="${item.id}">
+                        Request This Medicine
+                    </button>
+                `;
+                inventoryList.appendChild(card);
+            });
+
+            // Attach request listeners
+            document.querySelectorAll('.request-medicine').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const name = btn.dataset.name;
+                    const qty = btn.dataset.qty;
+                    const id = btn.dataset.id;
+                    // Mark as requested
+                    const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+                    const donation = donations.find(d => d.id == id);
+                    if (donation) donation.requested = true;
+                    localStorage.setItem('donations', JSON.stringify(donations));
+
+                    // Pass to request page
+                    sessionStorage.setItem('preFillRequest', JSON.stringify({ name, qty }));
+                    window.location.href = 'request.html';
+                });
+            });
+        }
+
+        // === 5. Live Search & Filters ===
+        function applyFilters() {
+            let filtered = allDonations;
+
+            // Search
+            const query = searchInput.value.toLowerCase().trim();
+            if (query) {
+                filtered = filtered.filter(item => item.name.toLowerCase().includes(query));
+            }
+
+            // Category (mock — real would need category field)
+            const category = categoryFilter.value;
+            if (category !== 'all') {
+                filtered = filtered.filter(item => {
+                    const cats = {
+                        painkiller: ['paracetamol', 'aspirin', 'ibuprofen'],
+                        antibiotic: ['amoxicillin', 'ciprofloxacin'],
+                        antipyretic: ['paracetamol'],
+                        other: []
+                    };
+                    return cats[category].some(c => item.name.toLowerCase().includes(c));
+                });
+            }
+
+            // Location
+            const location = locationFilter.value.toLowerCase().trim();
+            if (location) {
+                filtered = filtered.filter(item => item.address.toLowerCase().includes(location));
+            }
+
+            renderCards(filtered);
+        }
+
+        searchBtn.addEventListener('click', applyFilters);
+        searchInput.addEventListener('input', applyFilters);
+        categoryFilter.addEventListener('change', applyFilters);
+        locationFilter.addEventListener('input', applyFilters);
+
+        // === 6. Pre-fill on request.html ===
+        if (window.location.pathname.includes('request.html')) {
+            document.addEventListener('DOMContentLoaded', () => {
+                const preFill = JSON.parse(sessionStorage.getItem('preFillRequest') || '{}');
+                if (preFill.name) {
+                    document.getElementById('medicineName').value = preFill.name;
+                    document.getElementById('quantity').value = preFill.qty;
+                    sessionStorage.removeItem('preFillRequest');
+                }
+            });
+        }
+
+        // === 7. Logout ===
+        document.getElementById('logoutBtn').addEventListener('click', e => {
+            e.preventDefault();
+            if (confirm('Logout now?')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        });
+
+        // === 8. Init ===
+        document.addEventListener('DOMContentLoaded', () => {
+            loadInventory();
+            document.querySelector('.form-section').style.opacity = '1';
+        });
+    </script>
 </body>
 </html>

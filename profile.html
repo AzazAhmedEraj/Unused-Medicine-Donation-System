@@ -3,35 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unused Medicine Donation System - Profile</title>
+    <title>MedDonate - Profile</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="profile.css">
 </head>
-	body 
+<body>
+    <!-- Navbar -->
     <header class="navbar">
         <div class="container">
             <a href="index.html" class="logo">
-    <i class="fas fa-heartbeat"></i> MedDonate
-</a>
-            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+                <i class="fas fa-heartbeat"></i> MedDonate
+            </a>
+
+            <!-- Hamburger Button -->
+            <button class="nav-toggle-btn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <nav class="nav-links">
                 <ul>
                     <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
                     <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
                     <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
-                    <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
-                    <li><a href="index.html" class="btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    <li><a href="profile.html" class="active"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="#" id="logoutBtn" class="btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
             </nav>
-            <label for="nav-toggle" class="nav-toggle-label">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
         </div>
     </header>
 
+    <!-- Dashboard Layout -->
     <div class="dashboard-layout">
         <aside class="sidebar">
             <ul>
@@ -47,47 +51,50 @@
             <section class="form-section">
                 <div class="container">
                     <h2>Your Profile</h2>
-                    <div class="profile-display">
-                        <p><strong>Name:</strong> [User Name]</p>
-                        <p><strong>Email:</strong> [Email]</p>
-                        <p><strong>Phone:</strong> [Phone]</p>
-                        <p><strong>Address:</strong> [Address]</p>
-                        <p><strong>User Type:</strong> [Individual/NGO]</p>
+                    <div class="profile-display" id="profileDisplay">
+                        <p><strong>Name:</strong> <span id="userName"></span></p>
+                        <p><strong>Email:</strong> <span id="userEmail"></span></p>
+                        <p><strong>Phone:</strong> <span id="userPhone"></span></p>
+                        <p><strong>Address:</strong> <span id="userAddress"></span></p>
+                        <p><strong>User Type:</strong> <span id="userType"></span></p>
+                        <p><strong>Joined:</strong> <span id="userJoined"></span></p>
                     </div>
+
                     <h3>Edit Profile</h3>
-                    <form class="profile-form">
+                    <form id="editForm" class="profile-form" novalidate>
                         <div class="form-group">
-                            <label for="newPassword">New Password:</label>
+                            <label for="newPassword">New Password (leave blank to keep current):</label>
                             <input type="password" id="newPassword" placeholder="Enter new password">
+                            <span class="error"></span>
                         </div>
                         <div class="form-group">
                             <label for="confirmNewPassword">Confirm New Password:</label>
                             <input type="password" id="confirmNewPassword" placeholder="Confirm new password">
+                            <span class="error"></span>
                         </div>
                         <div class="form-group">
                             <label for="newAddress">Update Address:</label>
                             <textarea id="newAddress" placeholder="Enter new address"></textarea>
+                            <span class="error"></span>
                         </div>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>
-                    <h3>Donation/Request History</h3>
-                    <div class="history-list cards-grid">
-                        <div class="card">
-                            <p>Donation #1: Paracetamol, 50 tablets, Donated on 10/15/2025</p>
-                        </div>
-                        <div class="card">
-                            <p>Request #1: Aspirin, 20 tablets, Requested on 10/10/2025</p>
-                        </div>
+
+                    <h3>Donation & Request History</h3>
+                    <div id="historyList" class="history-list cards-grid">
+                        <!-- Filled by JS -->
                     </div>
+
                     <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
                 </div>
             </section>
         </main>
     </div>
 
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Unused Medicine Donation System. All rights reserved.</p>
+            <p>© 2025 MedDonate. All rights reserved.</p>
             <ul class="footer-links">
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -99,5 +106,149 @@
             </div>
         </div>
     </footer>
+
+    <!-- Back to Top -->
+    <button id="backToTop" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Success Toast -->
+    <div id="successToast" class="success-toast">
+        <i class="fas fa-check-circle"></i> Profile updated!
+    </div>
+
+    <script>
+        // === 1. Check Login ===
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        if (!currentUser.email) {
+            window.location.href = 'login.html';
+        }
+
+        // === 2. Mobile Menu (No Checkbox) ===
+        const toggleBtn = document.querySelector('.nav-toggle-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        toggleBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+            toggleBtn.classList.toggle('open');
+        });
+
+        document.querySelectorAll('.nav-links a, .sidebar a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                toggleBtn.classList.remove('open');
+            });
+        });
+
+        // === 3. Logout ===
+        document.getElementById('logoutBtn').addEventListener('click', e => {
+            e.preventDefault();
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        });
+
+        // === 4. Display User Info ===
+        document.getElementById('userName').textContent = currentUser.name || 'N/A';
+        document.getElementById('userEmail').textContent = currentUser.email || 'N/A';
+        document.getElementById('userPhone').textContent = currentUser.phone || 'N/A';
+        document.getElementById('userAddress').textContent = currentUser.address || 'N/A';
+        document.getElementById('userType').textContent = currentUser.type === 'ngo' ? 'NGO' : 'Individual';
+        document.getElementById('userJoined').textContent = currentUser.joined || 'N/A';
+
+        // Pre-fill edit form
+        document.getElementById('newAddress').value = currentUser.address || '';
+
+        // === 5. Edit Profile ===
+        const editForm = document.getElementById('editForm');
+        const toast = document.getElementById('successToast');
+
+        editForm.addEventListener('submit', e => {
+            e.preventDefault();
+            let valid = true;
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+            const newPwd = document.getElementById('newPassword').value;
+            const confirmPwd = document.getElementById('confirmNewPassword').value;
+            const newAddr = document.getElementById('newAddress').value.trim();
+
+            if (newPwd && newPwd.length < 6) {
+                showError('newPassword', 'Password too short');
+                valid = false;
+            }
+            if (newPwd && newPwd !== confirmPwd) {
+                showError('confirmNewPassword', 'Passwords don\'t match');
+                valid = false;
+            }
+            if (newAddr && newAddr.length < 10) {
+                showError('newAddress', 'Address too short');
+                valid = false;
+            }
+
+            if (!valid) return;
+
+            // Update user in localStorage
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.email === currentUser.email);
+            if (userIndex !== -1) {
+                if (newPwd) users[userIndex].password = newPwd;
+                if (newAddr) users[userIndex].address = newAddr;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(users[userIndex]));
+            }
+
+            showToast();
+            setTimeout(() => location.reload(), 1500);
+        });
+
+        function showError(fieldId, msg) {
+            const error = document.getElementById(fieldId).parentElement.querySelector('.error');
+            error.textContent = msg;
+            error.style.color = '#e74c3c';
+            error.style.fontSize = '0.85rem';
+        }
+
+        function showToast() {
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // === 6. History ===
+        const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+        const requests = JSON.parse(localStorage.getItem('requests') || '[]');
+        const historyList = document.getElementById('historyList');
+
+        const userDonations = donations.filter(d => d.email === currentUser.email);
+        const userRequests = requests.filter(r => r.email === currentUser.email);
+
+        const allHistory = [
+            ...userDonations.map(d => ({ ...d, type: 'donation' })),
+            ...userRequests.map(r => ({ ...r, type: 'request' }))
+        ].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        if (allHistory.length === 0) {
+            historyList.innerHTML = '<p style="text-align:center; color:#666;">No history yet.</p>';
+        } else {
+            historyList.innerHTML = allHistory.map(item => `
+                <div class="card">
+                    <p><strong>${item.type === 'donation' ? 'Donation' : 'Request'}</strong>: 
+                    ${item.medicine || item.name}, ${item.qty} unit(s)<br>
+                    <small>${item.type === 'donation' ? 'Donated' : 'Requested'} on ${item.date}</small>
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        // === 7. Back to Top ===
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
+        });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // === 8. Fade-in ===
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.form-section').style.opacity = '1';
+        });
+    </script>
 </body>
 </html>

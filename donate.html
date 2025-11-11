@@ -3,40 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unused Medicine Donation System - Donate Medicine</title>
+    <title>MedDonate - Donate Medicine</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="donate.css">
 </head>
 <body>
+    <!-- Navbar -->
     <header class="navbar">
         <div class="container">
             <a href="index.html" class="logo">
-    <i class="fas fa-heartbeat"></i> MedDonate
-</a>
-            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+                <i class="fas fa-heartbeat"></i> MedDonate
+            </a>
+
+            <!-- Hamburger Button -->
+            <button class="nav-toggle-btn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <nav class="nav-links">
                 <ul>
                     <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
                     <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
                     <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
                     <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
-                    <li><a href="index.html" class="btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    <li><a href="#" id="logoutBtn" class="btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
             </nav>
-            <label for="nav-toggle" class="nav-toggle-label">
-                <span></span>
-                <span></span>
-                <span></span>
-            </label>
         </div>
     </header>
 
+    <!-- Dashboard Layout -->
     <div class="dashboard-layout">
         <aside class="sidebar">
             <ul>
                 <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="donate.html"><i class="fas fa-gift"></i> Donate Medicine</a></li>
+                <li><a href="donate.html" class="active"><i class="fas fa-gift"></i> Donate Medicine</a></li>
                 <li><a href="request.html"><i class="fas fa-hand-holding-medical"></i> Request Medicine</a></li>
                 <li><a href="status.html"><i class="fas fa-clipboard-list"></i> Status</a></li>
                 <li><a href="inventory.html"><i class="fas fa-box-open"></i> Inventory</a></li>
@@ -47,54 +51,76 @@
             <section class="form-section">
                 <div class="container">
                     <h2>Donate Unused Medicine</h2>
-                    <form class="donate-form">
+                    <form id="donateForm" class="donate-form" novalidate>
                         <div class="form-group">
                             <label for="medicineName">Medicine Name:</label>
-                            <input type="text" id="medicineName" placeholder="Enter medicine name">
+                            <input type="text" id="medicineName" placeholder="Enter medicine name" required>
+                            <span class="error"></span>
                         </div>
+
                         <div class="form-group">
                             <label for="quantity">Quantity:</label>
-                            <input type="number" id="quantity" placeholder="Enter quantity">
+                            <input type="number" id="quantity" min="1" placeholder="Enter quantity" required>
+                            <span class="error"></span>
                         </div>
+
                         <div class="form-group">
                             <label for="expiryDate">Expiry Date:</label>
-                            <input type="date" id="expiryDate">
+                            <input type="date" id="expiryDate" required>
+                            <span class="error"></span>
                         </div>
+
                         <div class="form-group">
                             <label for="condition">Condition:</label>
-                            <select id="condition">
-                                <option value="new">New</option>
-                                <option value="opened">Opened</option>
+                            <select id="condition" required>
+                                <option value="">Select condition</option>
+                                <option value="new">New (Sealed)</option>
+                                <option value="opened">Opened (Safe to use)</option>
                             </select>
+                            <span class="error"></span>
                         </div>
+
                         <div class="form-group">
                             <label for="pickupAddress">Pickup Address:</label>
-                            <textarea id="pickupAddress" placeholder="Enter pickup address"></textarea>
+                            <textarea id="pickupAddress" placeholder="Enter pickup address" required></textarea>
+                            <span class="error"></span>
                         </div>
+
                         <div class="form-group">
                             <label for="contactInfo">Contact Info:</label>
-                            <input type="text" id="contactInfo" placeholder="Enter contact info">
+                            <input type="text" id="contactInfo" placeholder="Phone or email" required>
+                            <span class="error"></span>
                         </div>
+
                         <div class="form-group">
-                            <label for="photo">Upload Photo:</label>
-                            <input type="file" id="photo">
+                            <label for="photo">Upload Photo (Optional):</label>
+                            <input type="file" id="photo" accept="image/*">
                         </div>
+
                         <div class="form-group">
                             <label for="description">Additional Details:</label>
-                            <textarea id="description" placeholder="Enter additional details"></textarea>
+                            <textarea id="description" placeholder="Any notes (optional)"></textarea>
                         </div>
+
                         <p class="note">Your donation will help NGOs and individuals in need.</p>
+
                         <button type="submit" class="btn btn-primary">Submit Donation</button>
                         <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
                     </form>
+
+                    <!-- Success Toast -->
+                    <div id="successToast" class="success-toast">
+                        <i class="fas fa-check-circle"></i> Donation submitted! Redirecting...
+                    </div>
                 </div>
             </section>
         </main>
     </div>
 
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Unused Medicine Donation System. All rights reserved.</p>
+            <p>© 2025 MedDonate. All rights reserved.</p>
             <ul class="footer-links">
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -106,5 +132,122 @@
             </div>
         </div>
     </footer>
+
+    <!-- Back to Top -->
+    <button id="backToTop" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // === 1. Check Login ===
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        if (!currentUser.email) {
+            window.location.href = 'login.html';
+        }
+
+        // === 2. Mobile Menu (No Checkbox) ===
+        const toggleBtn = document.querySelector('.nav-toggle-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        toggleBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+            toggleBtn.classList.toggle('open');
+        });
+
+        document.querySelectorAll('.nav-links a, .sidebar a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                toggleBtn.classList.remove('open');
+            });
+        });
+
+        // === 3. Logout ===
+        document.getElementById('logoutBtn').addEventListener('click', e => {
+            e.preventDefault();
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        });
+
+        // === 4. Auto-fill User Info ===
+        document.getElementById('pickupAddress').value = currentUser.address || '';
+        document.getElementById('contactInfo').value = currentUser.phone || currentUser.email || '';
+
+        // === 5. Donation Form ===
+        const form = document.getElementById('donateForm');
+        const toast = document.getElementById('successToast');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            let valid = true;
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+            const name = document.getElementById('medicineName');
+            const qty = document.getElementById('quantity');
+            const expiry = document.getElementById('expiryDate');
+            const condition = document.getElementById('condition');
+            const address = document.getElementById('pickupAddress');
+            const contact = document.getElementById('contactInfo');
+
+            if (name.value.trim().length < 2) { showError(name, 'Name too short'); valid = false; }
+            if (!qty.value || qty.value < 1) { showError(qty, 'Enter valid quantity'); valid = false; }
+            if (!expiry.value) { showError(expiry, 'Select expiry date'); valid = false; }
+            if (!condition.value) { showError(condition, 'Select condition'); valid = false; }
+            if (address.value.trim().length < 10) { showError(address, 'Address too short'); valid = false; }
+            if (!contact.value.trim()) { showError(contact, 'Enter contact'); valid = false; }
+
+            // Expiry must be future
+            if (new Date(expiry.value) <= new Date()) {
+                showError(expiry, 'Medicine expired');
+                valid = false;
+            }
+
+            if (!valid) return;
+
+            // Save Donation
+            const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+            donations.push({
+                id: Date.now(),
+                email: currentUser.email,
+                name: currentUser.name,
+                medicine: name.value.trim(),
+                qty: parseInt(qty.value),
+                expiry: expiry.value,
+                condition: condition.value,
+                address: address.value.trim(),
+                contact: contact.value.trim(),
+                description: document.getElementById('description').value.trim(),
+                status: 'pending',
+                date: new Date().toLocaleDateString('en-GB')
+            });
+            localStorage.setItem('donations', JSON.stringify(donations));
+
+            showToast();
+            setTimeout(() => window.location.href = 'dashboard.html', 2000);
+        });
+
+        function showError(input, msg) {
+            const error = input.parentElement.querySelector('.error');
+            error.textContent = msg;
+            error.style.color = '#e74c3c';
+            error.style.fontSize = '0.85rem';
+        }
+
+        function showToast() {
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // === 6. Back to Top ===
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
+        });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // === 7. Fade-in ===
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.form-section').style.opacity = '1';
+        });
+    </script>
 </body>
 </html>
