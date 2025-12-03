@@ -575,102 +575,114 @@ summary {
         padding: 25px 0;
     }
 }
-/* Status Badges */
-.status-badge {
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: capitalize;
+
+
+/* Status Page Specific Styles */
+.status-section {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    padding: 20px 0;
 }
 
-.status-badge.pending { background: #fff3cd; color: #856404; }
-.status-badge.approved { background: #d4edda; color: #155724; }
-.status-badge.matched { background: #d1ecf1; color: #0c5460; }
-.status-badge.delivered { background: #d1ecf1; color: #0c5460; }
-
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1002;
-    left: 0; top: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    overflow: auto;
-}
-
-.modal-content {
-    background: white;
-    margin: 10% auto;
-    padding: 25px;
-    border-radius: 12px;
-    max-width: 500px;
-    position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
-
-.close {
-    position: absolute;
-    top: 10px; right: 15px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #aaa;
-}
-
-.close:hover { color: #000; }
-
-/* Filter Group */
 .filter-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 20px;
     align-items: center;
-    margin-bottom: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
 }
 
-.filter-group select,
-.filter-group input {
-    flex: 1;
-    min-width: 150px;
+.filter-group > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-group label {
+    font-weight: 600;
+    color: #444;
+    min-width: 60px;
+}
+
+.filter-group select {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
+    min-width: 160px;
 }
 
-/* Fade-in */
-.form-section {
-    opacity: 0;
-    transition: opacity 0.8s ease;
+.table-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin: 20px 0;
 }
 
-/* Back to Top */
-#backToTop {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: #4CAF50;
-    color: white;
-    border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    display: none;
-    z-index: 999;
-    transition: all 0.3s ease;
+.status-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-#backToTop:hover {
-    background: #388E3C;
-    transform: scale(1.1);
+.status-table th,
+.status-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
 }
 
-/* Active Sidebar */
-.sidebar a.active {
-    background: #4CAF50;
-    color: white;
-    font-weight: 700;
-    border-radius: 8px;
+.status-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.status-table tr:hover {
+    background: #f0f8ff;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-badge.pending   { background: #fff3cd; color: #856404; }
+.status-badge.approved  { background: #d4edda; color: #155724; }
+.status-badge.matched   { background: #d1ecf1; color: #0c5460; }
+.status-badge.delivered { background: #d0f0c0; color: #2e7d32; }
+.status-badge.rejected  { background: #f8d7da; color: #721c24; }
+
+/* Mobile Responsive */
+@media (max-width: 767px) {
+    .status-table thead { display: none; }
+    .status-table tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 12px;
+    }
+    .status-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border: none;
+    }
+    .status-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #555;
+    }
+    .status-table td:last-child {
+        justify-content: flex-end;
+    }
 }
