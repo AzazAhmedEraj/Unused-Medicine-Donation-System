@@ -21,11 +21,11 @@
             </button>
             <nav class="nav-links">
                 <ul>
-                    <li><a href="index.html"> Home</a></li>
-                    <li><a href="about.html"> About</a></li>
-                    <li><a href="contact.html"> Contact</a></li>
-                    <li><a href="profile.html"> Profile</a></li>
-                    <li><a href="#" id="logoutBtn" class="btn-secondary"> Logout</a></li>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a href="#" id="logoutBtn" class="btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
             </nav>
         </div>
@@ -34,14 +34,15 @@
     <div class="dashboard-layout">
         <aside class="sidebar">
             <ul>
-                <li><a href="dashboard.html"> Dashboard</a></li>
-                <li><a href="donate.html"> Donate Medicine</a></li>
-                <li><a href="request.html"> Request Medicine</a></li>
-                <li><a href="status.html" class="active"> Status</a></li>
-                <li><a href="inventory.html"> Inventory</a></li>
+                <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="donate.html"><i class="fas fa-gift"></i> Donate Medicine</a></li>
+                <li><a href="request.html"><i class="fas fa-hand-holding-medical"></i> Request Medicine</a></li>
+                <li><a href="status.html" class="active"><i class="fas fa-clipboard-list"></i> Status</a></li>
+                <li><a href="inventory.html"><i class="fas fa-box-open"></i> Inventory</a></li>
             </ul>
         </aside>
 
+        <!-- Rest of your page (table, filters, etc.) remains 100% the same -->
         <main class="main-content dashboard-content">
             <section class="status-section">
                 <div class="container">
@@ -112,8 +113,8 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
+    <!-- Same JS as before (no change needed) -->
     <script>
-        // === Mobile Menu Toggle ===
         const toggleBtn = document.querySelector('.nav-toggle-btn');
         const navLinks = document.querySelector('.nav-links');
         toggleBtn.addEventListener('click', () => {
@@ -121,7 +122,6 @@
             toggleBtn.classList.toggle('open');
         });
 
-        // === Sample Data (Replace with real API later) ===
         let records = [
             { id: 1, type: "donation", medicine: "Paracetamol", qty: 50, date: "15 Oct 2025", status: "pending" },
             { id: 2, type: "request", medicine: "Aspirin", qty: 20, date: "12 Oct 2025", status: "approved" },
@@ -161,52 +161,39 @@
                     <td>${item.date}</td>
                     <td>${getStatusBadge(item.status)}</td>
                     <td style="text-align:right;">
-                        <button class="btn btn-secondary view-btn" data-id="${item.id}">
-                            View Details
-                        </button>
+                        <button class="btn btn-secondary view-btn" data-id="${item.id}">View Details</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            // View Details (you can open modal or go to detail page)
             document.querySelectorAll('.view-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const record = data.find(r => r.id == btn.dataset.id);
                     alert(`Details:\nType: ${record.type}\nMedicine: ${record.medicine}\nQty: ${record.qty}\nStatus: ${record.status.toUpperCase()}`);
-                    // Later: open modal with photo, address, etc.
                 });
             });
         }
 
-        // Initial render
         renderTable(records);
 
-        // === Filter Logic ===
         document.getElementById('filterBtn').addEventListener('click', () => {
             const type = document.getElementById('typeFilter').value;
             const status = document.getElementById('statusFilter').value;
 
             let filtered = records;
-
-            if (type !== 'all') {
-                filtered = filtered.filter(r => r.type === type);
-            }
-            if (status !== 'all') {
-                filtered = filtered.filter(r => r.status === status);
-            }
+            if (type !== 'all') filtered = filtered.filter(r => r.type === type);
+            if (status !== 'all') filtered = filtered.filter(r => r.status === status);
 
             renderTable(filtered);
         });
 
-        // === Back to Top Button ===
         const backToTop = document.getElementById('backToTop');
         window.addEventListener('scroll', () => {
             backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
         });
         backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-        // Fade in
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.status-section').style.opacity = '1';
         });
