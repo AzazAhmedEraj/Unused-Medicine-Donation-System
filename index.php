@@ -6,7 +6,7 @@
     <title>Unused Medicine Donation System - Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header class="navbar">
@@ -17,11 +17,11 @@
             <input type="checkbox" id="nav-toggle" class="nav-toggle">
             <nav class="nav-links">
                 <ul>
-                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="about.html"><i class="fas fa-info-circle"></i> About</a></li>
-                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
-                    <li><a href="login.html" class="btn-secondary"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-                    <li><a href="register.html" class="btn-primary"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                    <li><a href="index.php"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="about.php"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="contact.php"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="login.php" class="btn-secondary"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                    <li><a href="register.php" class="btn-primary"><i class="fas fa-user-plus"></i> Sign Up</a></li>
                 </ul>
             </nav>
             <label for="nav-toggle" class="nav-toggle-label">
@@ -58,9 +58,9 @@
 
         <section class="cta">
             <div class="container">
-                <a href="register.html" class="btn btn-primary">Register Now</a>
-                <a href="login.html" class="btn btn-secondary">Login</a>
-                <a href="about.html" class="btn btn-secondary">Learn More</a>
+                <a href="register.php" class="btn btn-primary">Register Now</a>
+                <a href="login.php" class="btn btn-secondary">Login</a>
+                <a href="about.php" class="btn btn-secondary">Learn More</a>
             </div>
         </section>
     </main>
@@ -69,8 +69,8 @@
         <div class="container">
             <p>&copy; 2025 Unused Medicine Donation System. All rights reserved.</p>
             <ul class="footer-links">
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="about.php">About</a></li>
+                <li><a href="contact.php">Contact</a></li>
             </ul>
             <div class="social-icons">
                 <a href="#" class="social-icon"><i class="fab fa-twitter"></i> Twitter</a>
